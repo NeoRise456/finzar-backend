@@ -27,12 +27,12 @@ public class Wallet  extends AuditableAbstractAggregateRoot<Wallet> {
 
     @Getter
     @Min(0)
-    @Column(name = "balance", nullable = false, columnDefinition = "double default 0")
+    @Column(name = "balance", nullable = false, columnDefinition = "real default 0")
     private double balance;
 
     @Getter
     @Min(0)
-    @Column(name = "total_balance", nullable = false, columnDefinition = "double default 0")
+    @Column(name = "total_balance", nullable = false, columnDefinition = "real default 0")
     private double totalBalance;
 
     public Wallet() {
