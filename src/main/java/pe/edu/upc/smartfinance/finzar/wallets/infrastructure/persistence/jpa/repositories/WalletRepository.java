@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
     boolean existsByName(String name);
-    boolean existsByNameAndUserIdIsNot( String name, Long userId);
+    boolean existsByNameAndUserIdIs( String name, Long userId);
     Optional<Wallet> findByName(String name);
 }
