@@ -1,81 +1,89 @@
 package pe.edu.upc.smartfinance.finzar.savings.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.upc.smartfinance.finzar.savings.domain.model.aggregates.Saving;
+import pe.edu.upc.smartfinance.finzar.savings.domain.model.commands.DeleteSavingCommand;
+import pe.edu.upc.smartfinance.finzar.savings.domain.model.queries.GetAllSavingsQuery;
+import pe.edu.upc.smartfinance.finzar.savings.domain.model.queries.GetSavingByIdQuery;
+import pe.edu.upc.smartfinance.finzar.savings.domain.services.SavingCommandService;
 import pe.edu.upc.smartfinance.finzar.savings.domain.services.SavingQueryService;
-import pe.edu.upc.smartfinance.finzar.savings.infrastructure.persistence.jpa.repositories.SavingRepository;
+import pe.edu.upc.smartfinance.finzar.savings.interfaces.rest.resources.CreateSavingResource;
+import pe.edu.upc.smartfinance.finzar.savings.interfaces.rest.resources.SavingResource;
+import pe.edu.upc.smartfinance.finzar.savings.interfaces.rest.transform.CreateSavingCommandFromResourceAssembler;
+import pe.edu.upc.smartfinance.finzar.savings.interfaces.rest.transform.SavingResourceFromEntityAssembler;
+import pe.edu.upc.smartfinance.finzar.savings.interfaces.rest.transform.UpdateSavingCommandFromResourceAssembler;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 @RestController
 @RequestMapping(value = "/api/v1/savings", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Savings", description = "Saving Management Endpoints")
-
+@Tag(name = "Savings", description = "Savings Management Endpoints")
 public class SavingsController {
 
     private final SavingQueryService savingQueryService;
+    private final SavingCommandService savingCommandService;
 
-    public SavingsController(SavingQueryService savingQueryService) {
+    public SavingsController(SavingQueryService savingQueryService, SavingCommandService savingCommandService) {
         this.savingQueryService = savingQueryService;
-    }
-
-
-
-    @GetMapping
-    public List<Saving> getAllSavings() {
-        return savingQueryService.getAllSavings();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Saving> getSavingById(@PathVariable Long id) {
-        return savingQueryService.getSavingById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        this.savingCommandService = savingCommandService;
     }
 
     @PostMapping
-    public Saving createSaving(@RequestBody Saving saving) {
-        return savingQueryService.createSaving(saving);
+    public ResponseEntity<SavingResource> createSaving(@RequestBody CreateSavingResource resource) {
+        var createSavingCommand = CreateSavingCommandFromResourceAssembler.toCommandFromResource(resource);
+        var savingId = this.savingCommandService.handle(createSavingCommand);
+
+        if (savingId.equals(0L)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        var getSavingByIdQuery = new GetSavingByIdQuery(savingId);
+        var optionalSaving = this.savingQueryService.handle(getSavingByIdQuery);
+
+        var savingResource = SavingResourceFromEntityAssembler.toResourceFromEntity(optionalSaving.get());
+        return new ResponseEntity<>(savingResource, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Saving> updateSaving(@PathVariable Long id, @RequestBody Saving saving) {
-        return savingQueryService.getSavingById(id)
-                .map(existingSaving -> ResponseEntity.ok(savingQueryService.updateSaving(id, saving)))
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping
+    public ResponseEntity<List<SavingResource>> getAllSavings() {
+        var getAllSavingsQuery = new GetAllSavingsQuery();
+        var savings = this.savingQueryService.handle(getAllSavingsQuery);
+        var savingResources = savings.stream()
+                .map(SavingResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(savingResources);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteSaving(@PathVariable Long id) {
-        return savingQueryService.getSavingById(id)
-                .map(existingSaving -> {
-                    savingQueryService.deleteSaving(id);
-                    return ResponseEntity.noContent().build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/{savingId}")
+    public ResponseEntity<SavingResource> getSavingById(@PathVariable Long savingId) {
+        var getSavingByIdQuery = new GetSavingByIdQuery(savingId);
+        var optionalSaving = this.savingQueryService.handle(getSavingByIdQuery);
+        if (optionalSaving.isEmpty())
+            return ResponseEntity.badRequest().build();
+        var savingResource = SavingResourceFromEntityAssembler.toResourceFromEntity(optionalSaving.get());
+        return ResponseEntity.ok(savingResource);
     }
 
-    @GetMapping("/existsByName/{name}")
-    public ResponseEntity<Boolean> existsByName(@PathVariable String name) {
-        boolean exists = savingQueryService.existsByName(name);
-        return ResponseEntity.ok(exists);
+    @PutMapping("/{savingId}")
+    public ResponseEntity<SavingResource> updateSaving(@PathVariable Long savingId, @RequestBody SavingResource resource) {
+        var updateSavingCommand = UpdateSavingCommandFromResourceAssembler.toCommandFromResource(savingId, resource);
+        var optionalSaving = this.savingCommandService.handle(updateSavingCommand);
+
+        if (optionalSaving.isEmpty())
+            return ResponseEntity.badRequest().build();
+        var savingResource = SavingResourceFromEntityAssembler.toResourceFromEntity(optionalSaving.get());
+        return ResponseEntity.ok(savingResource);
     }
 
-    @GetMapping("/existsByNameAndIdIsNot/{name}/{id}")
-    public ResponseEntity<Boolean> existsByNameAndIdIsNot(@PathVariable String name, @PathVariable Long id) {
-        boolean exists = savingQueryService.existsByNameAndIdIsNot(name, id);
-        return ResponseEntity.ok(exists);
+    @DeleteMapping("/{savingId}")
+    public ResponseEntity<?> deleteSaving(@PathVariable Long savingId) {
+        var deleteSavingCommand = new DeleteSavingCommand(savingId);
+        this.savingCommandService.handle(deleteSavingCommand);
+        return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/findByName/{name}")
-    public ResponseEntity<java.util.Optional<Saving>> findByName(@PathVariable String name) {
-        Optional<Saving> saving = savingQueryService.findByName(name);
-        return ResponseEntity.ok(saving);
-    }
-
 }
