@@ -8,12 +8,13 @@ import pe.edu.upc.smartfinance.finzar.savings.domain.model.valueobjects.CurrentA
 import pe.edu.upc.smartfinance.finzar.savings.domain.model.valueobjects.GoalAmount;
 import pe.edu.upc.smartfinance.finzar.savings.domain.model.valueobjects.SavingPeriod;
 import pe.edu.upc.smartfinance.finzar.savings.domain.model.valueobjects.UserId;
+import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "savings")
-public class Saving {
+public class Saving extends AuditableAbstractAggregateRoot<Saving> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
