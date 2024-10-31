@@ -1,4 +1,15 @@
 package pe.edu.upc.smartfinance.finzar.savings.interfaces.rest.resources;
 
-public record CreateSavingResource(String name, int totalGoal, int currentAmount, int startDate, int endDate) {
+
+import java.time.LocalDate;
+
+public record CreateSavingResource(
+        Long userId,
+        String name,
+        double totalGoal,
+        double currentAmount,
+        Long categoryId,
+        LocalDate startDate,
+        LocalDate endDate
+) {
 }
