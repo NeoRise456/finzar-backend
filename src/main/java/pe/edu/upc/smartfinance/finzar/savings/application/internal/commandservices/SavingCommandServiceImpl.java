@@ -44,8 +44,10 @@ public class SavingCommandServiceImpl implements SavingCommandService {
             throw new IllegalArgumentException("Saving with name " + name + " already exists");
         }
 
+
         var savingToUpdate = this.savingRepository.findById(savingId)
                 .orElseThrow(() -> new IllegalArgumentException("Saving with id " + savingId + " does not exist"));
+
 
         savingToUpdate.updateInformation(command.name(), command.totalGoal(),
                 command.currentAmount(), command.categoryId(),
