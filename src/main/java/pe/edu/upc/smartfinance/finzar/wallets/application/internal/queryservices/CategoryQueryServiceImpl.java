@@ -1,5 +1,6 @@
 package pe.edu.upc.smartfinance.finzar.wallets.application.internal.queryservices;
 
+import org.springframework.stereotype.Service;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.entities.Category;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.queries.GetAllCategoriesQuery;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.queries.GetCategoryByIdQuery;
@@ -9,6 +10,7 @@ import pe.edu.upc.smartfinance.finzar.wallets.infrastructure.persistence.jpa.rep
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CategoryQueryServiceImpl implements CategoryQueryService {
 
     private final CategoryRepository categoryRepository;
