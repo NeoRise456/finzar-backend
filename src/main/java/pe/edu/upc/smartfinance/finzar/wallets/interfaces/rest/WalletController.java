@@ -73,6 +73,9 @@ public class WalletController {
         return ResponseEntity.ok(walletResource);
     }
 
+    //TODO: getWalletByUserId
+
+    //TODO: updateWallet
 
 
 
