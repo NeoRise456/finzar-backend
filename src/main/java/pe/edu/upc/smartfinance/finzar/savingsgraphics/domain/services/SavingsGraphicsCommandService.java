@@ -4,6 +4,3 @@ import pe.edu.upc.smartfinance.finzar.savingsgraphics.domain.model.aggregates.Sa
 
 import java.util.List;
 
-public interface SavingsGraphicsCommandService {
-    List<SavingsGraphics> getAllSavingsGraphics();
-}
