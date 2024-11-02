@@ -1,11 +1,21 @@
 package pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.smartfinance.finzar.wallets.domain.model.queries.GetAllCategoriesQuery;
+import pe.edu.upc.smartfinance.finzar.wallets.domain.model.queries.GetCategoryByIdQuery;
+import pe.edu.upc.smartfinance.finzar.wallets.domain.services.CategoryCommandService;
+import pe.edu.upc.smartfinance.finzar.wallets.domain.services.CategoryQueryService;
+import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.CategoryResource;
+import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.CreateCategoryResource;
+import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.transform.CategoryResourceFromEntityAssembler;
+import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.transform.CreateCategoryCommandFromResourceAssembler;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 @RestController
@@ -13,10 +23,47 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Categories", description = "Categories Management Endpoints")
 public class CategoryController {
 
-    //TODO: getCategoryById
+    private final CategoryCommandService categoryCommandService;
+    private final CategoryQueryService categoryQueryService;
 
-    //TODO: getAllCategories
+    public CategoryController(CategoryCommandService categoryCommandService, CategoryQueryService categoryQueryService) {
+        this.categoryCommandService = categoryCommandService;
+        this.categoryQueryService = categoryQueryService;
+    }
 
-    //TODO: createCategory
+    @PostMapping
+    public ResponseEntity<CategoryResource> createCategory(@RequestBody CreateCategoryResource resource) {
+        var createCategoryCommand = CreateCategoryCommandFromResourceAssembler.toCommandFromResource(resource);
+        var categoryId = categoryCommandService.handle(createCategoryCommand);
+
+        if (categoryId.equals(0L)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        var getCategoryByIdQuery = new GetCategoryByIdQuery(categoryId);
+        var category = this.categoryQueryService.handle(getCategoryByIdQuery);
+
+        var categoryResource = CategoryResourceFromEntityAssembler.toResourceFromEntity(category.get());
+        return new ResponseEntity<>(categoryResource, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<CategoryResource> getCategoryById(@PathVariable Long categoryId) {
+        var getCategoryByIdQuery = new GetCategoryByIdQuery(categoryId);
+        var category = this.categoryQueryService.handle(getCategoryByIdQuery);
+
+        var categoryResource = CategoryResourceFromEntityAssembler.toResourceFromEntity(category.get());
+        return ResponseEntity.ok(categoryResource);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoryResource>> getAllCategories() {
+        var getAllCategoriesQuery = new GetAllCategoriesQuery();
+        var categories = this.categoryQueryService.handle(getAllCategoriesQuery);
+        var categoryResources = categories.stream()
+                .map(CategoryResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(categoryResources);
+    }
 
 }
