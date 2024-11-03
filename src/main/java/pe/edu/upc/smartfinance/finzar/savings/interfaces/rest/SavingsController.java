@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.smartfinance.finzar.savings.domain.model.commands.DeleteSavingCommand;
 import pe.edu.upc.smartfinance.finzar.savings.domain.model.queries.GetAllSavingsQuery;
 import pe.edu.upc.smartfinance.finzar.savings.domain.model.queries.GetSavingByIdQuery;
+import pe.edu.upc.smartfinance.finzar.savings.domain.model.queries.GetSavingByUserIdQuery;
 import pe.edu.upc.smartfinance.finzar.savings.domain.services.SavingCommandService;
 import pe.edu.upc.smartfinance.finzar.savings.domain.services.SavingQueryService;
 import pe.edu.upc.smartfinance.finzar.savings.interfaces.rest.resources.CreateSavingResource;
@@ -31,6 +32,18 @@ public class SavingsController {
     public SavingsController(SavingQueryService savingQueryService, SavingCommandService savingCommandService) {
         this.savingQueryService = savingQueryService;
         this.savingCommandService = savingCommandService;
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<SavingResource>> getSavingsByUserId(@PathVariable Long userId) {
+        var query = new GetSavingByUserIdQuery(userId);
+        var savings = this.savingQueryService.handle(query);
+
+        var savingResources = savings.stream()
+                .map(SavingResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(savingResources);
     }
 
     @PostMapping
