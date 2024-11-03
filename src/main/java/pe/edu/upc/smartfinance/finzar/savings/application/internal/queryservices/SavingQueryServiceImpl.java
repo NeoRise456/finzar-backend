@@ -5,6 +5,8 @@ import pe.edu.upc.smartfinance.finzar.savings.domain.model.aggregates.Saving;
 import pe.edu.upc.smartfinance.finzar.savings.domain.model.queries.GetAllSavingsQuery;
 import pe.edu.upc.smartfinance.finzar.savings.domain.model.queries.GetSavingByIdQuery;
 import pe.edu.upc.smartfinance.finzar.savings.domain.model.queries.GetSavingByNameQuery;
+import pe.edu.upc.smartfinance.finzar.savings.domain.model.queries.GetSavingByUserIdQuery;
+import pe.edu.upc.smartfinance.finzar.savings.domain.model.valueobjects.UserId;
 import pe.edu.upc.smartfinance.finzar.savings.domain.services.SavingQueryService;
 import pe.edu.upc.smartfinance.finzar.savings.infrastructure.persistence.jpa.repositories.SavingRepository;
 
@@ -35,4 +37,11 @@ public class SavingQueryServiceImpl implements SavingQueryService {
     public Optional<Saving> handle(GetSavingByNameQuery query) {
         return this.savingRepository.findByName(query.name());
     }
+
+    @Override
+    public List<Saving> handle(GetSavingByUserIdQuery query) {
+        var userId = new UserId(query.userId()); // Crear el objeto UserId a partir del Long
+        return this.savingRepository.findSavingsByUserId(userId);
+    }
+
 }
