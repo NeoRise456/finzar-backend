@@ -9,6 +9,8 @@ import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.Categor
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.PeriodRecurrence;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
 
+import java.util.List;
+
 @Entity
 @Table(name = "expenses")
 @Getter
@@ -30,6 +32,15 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "period_recurrence_id")
     private PeriodRecurrence periodRecurrence;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "expense_transactions",
+            joinColumns = @JoinColumn(name = "expense_id"),
+            inverseJoinColumns = @JoinColumn(name = "transaction_id")
+    )
+    private List<Transaction> transactions;
 
     public Expense() {
     }

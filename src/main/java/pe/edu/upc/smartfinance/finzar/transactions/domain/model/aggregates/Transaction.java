@@ -10,6 +10,7 @@ import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.TransactionType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,6 +40,12 @@ public class Transaction extends AuditableAbstractAggregateRoot<Transaction> {
     @NotBlank
     @Column(name = "transaction_date")
     private LocalDateTime transactionDate;
+
+    @ManyToMany(mappedBy = "transactions")
+    private List<Earning> earnings;
+
+    @ManyToMany(mappedBy = "transactions")
+    private List<Expense> Expenses;
 
     public Transaction() {
     }
