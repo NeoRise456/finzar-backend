@@ -5,6 +5,6 @@ import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.CreateWa
 
 public class CreateWalletCommandFromResourceAssembler {
     public static CreateWalletCommand toCommandFromResource(CreateWalletResource resource) {
-        return new CreateWalletCommand(resource.userId(), resource.name(), resource.balance(), resource.totalBalance());
+        return new CreateWalletCommand(resource.userId(), resource.name(), resource.initialBalance());
     }
 }
