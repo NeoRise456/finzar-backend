@@ -1,20 +1,33 @@
 package pe.edu.upc.smartfinance.finzar.IAM.domain.model.aggregates;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import org.springframework.data.domain.AbstractAggregateRoot;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 @Entity
-@Getter
-@EntityListeners(AuditingEntityListener.class)
-public class User extends AbstractAggregateRoot<User> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "users")
+public class User extends AuditableAbstractAggregateRoot<User> {
 
+    @Getter
+    @NotNull
+    @NotBlank
+    @Column(name = "username", length = 50, nullable = false)
     private String username;
+
+    @Getter
+    @NotNull
+    @NotBlank
+    @Email
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Getter
+    @NotNull
+    @NotBlank
+    @Column(name = "password", length = 20, nullable = false)
     private String password;
 
     public User () {}
