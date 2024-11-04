@@ -1,4 +1,4 @@
 package pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands;
 
-public record DeleteExpenseCommand() {
+public record DeleteExpenseCommand(Long expenseId) {
 }
