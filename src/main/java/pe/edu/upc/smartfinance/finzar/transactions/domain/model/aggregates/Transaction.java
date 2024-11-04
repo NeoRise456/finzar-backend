@@ -53,7 +53,6 @@ public class Transaction extends AuditableAbstractAggregateRoot<Transaction> {
     public Transaction updateInformation(Double amount, String note, LocalDateTime transactionDate) {
         this.amount = amount;
         this.note = note;
-        this.transactionDate = transactionDate;
         return this;
     }
 
