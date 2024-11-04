@@ -1,11 +1,22 @@
 package pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.DeleteExpenseCommand;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetExpenseByIdQuery;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetExpensesByWalletIdAndCategoryIdQuery;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.services.ExpenseCommandService;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.services.ExpenseQueryService;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.CreateExpenseResource;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.ExpenseResource;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform.CreateExpenseCommandFromResourceAssembler;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform.ExpenseResourceFromEntityAssembler;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 @RestController
@@ -13,11 +24,79 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Expenses", description = "Expenses Management Endpoints")
 public class ExpenseController {
 
-    //TODO: getExpensesByWalletId
+    private final ExpenseCommandService expenseCommandService;
+    private final ExpenseQueryService expenseQueryService;
 
-    //TODO: getExpensesByUserId
+    public ExpenseController(ExpenseCommandService expenseCommandService, ExpenseQueryService expenseQueryService) {
+        this.expenseCommandService = expenseCommandService;
+        this.expenseQueryService = expenseQueryService;
+    }
 
-    //TODO: getExpensesById
 
-    //TODO: createExpense
+    @GetMapping
+    public ResponseEntity<List<ExpenseResource>> getExpensesByWalletId(@RequestParam Long walletId, @RequestParam Long categoryId) {
+
+        var getExpensesByWalletIdAndCategoryIdQuery = new GetExpensesByWalletIdAndCategoryIdQuery(walletId, categoryId);
+
+        var expenses = this.expenseQueryService.handle(getExpensesByWalletIdAndCategoryIdQuery);
+
+        if (expenses.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var expenseResources = expenses.stream()
+                .map(ExpenseResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(expenseResources);
+    }
+
+
+    @GetMapping("/{expenseId}")
+    public ResponseEntity<ExpenseResource> getExpenseById( @PathVariable Long expenseId){
+        var getExpenseByIdQuery = new GetExpenseByIdQuery(expenseId);
+
+        var expense = this.expenseQueryService.handle(getExpenseByIdQuery);
+
+        if (expense.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
+
+        return ResponseEntity.ok(expenseResource);
+    }
+
+
+    @PostMapping
+    public ResponseEntity<ExpenseResource> createExpense(@RequestBody CreateExpenseResource resource) {
+        var createExpenseCommand = CreateExpenseCommandFromResourceAssembler.toCommandFromResource(resource);
+
+        var expenseId = this.expenseCommandService.handle(createExpenseCommand);
+
+        if (expenseId.equals(0L)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        var getExpenseByIdQuery = new GetExpenseByIdQuery(expenseId);
+        var expense = this.expenseQueryService.handle(getExpenseByIdQuery);
+
+        var expenseResource = ExpenseResourceFromEntityAssembler.toResourceFromEntity(expense.get());
+
+        return new ResponseEntity<>(expenseResource, HttpStatus.CREATED);
+    }
+
+
+    @DeleteMapping("/{expenseId}")
+    public ResponseEntity<?> deleteExpense(@PathVariable Long expenseId) {
+        var deleteExpenseCommand = new DeleteExpenseCommand(expenseId);
+        var deleteConfirmation = this.expenseCommandService.handle(deleteExpenseCommand);
+
+        if (!deleteConfirmation) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok("The Expense with the given id has been deleted");
+    }
+
 }
