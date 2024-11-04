@@ -1,5 +1,6 @@
 package pe.edu.upc.smartfinance.finzar.transactions.application.internal.queryservices;
 
+import org.springframework.stereotype.Service;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Earning;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetEarningByIdQuery;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetEarningsByWalletIdAndCategoryIdQuery;
@@ -9,6 +10,7 @@ import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jp
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class EarningQueryServiceImpl implements EarningQueryService {
 
     private final EarningRepository earningRepository;
