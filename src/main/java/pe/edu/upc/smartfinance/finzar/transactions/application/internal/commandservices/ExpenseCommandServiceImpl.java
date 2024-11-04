@@ -33,8 +33,23 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
     public Long handle(CreateExpenseCommand command) {
 
         var wallet = this.walletRepository.findById(command.walletId());
+
+        if(!wallet.isPresent()){
+            throw new IllegalArgumentException("Wallet not found");
+        }
+
         var category = this.categoryRepository.findById(command.categoryId());
+
+
+        if(!category.isPresent()){
+            throw new IllegalArgumentException("Category not found");
+        }
+
         var periodRecurrence = this.periodRecurrenceRepository.findById(command.periodRecurrenceId());
+
+        if(!periodRecurrence.isPresent()){
+            throw new IllegalArgumentException("Period Recurrence not found");
+        }
 
 
         var expense = new Expense(

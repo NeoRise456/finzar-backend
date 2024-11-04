@@ -33,7 +33,17 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
     public Long handle(CreateTransactionCommand command) {
 
         var wallet = this.walletRepository.findById(command.walletId());
+
+        if (!wallet.isPresent()) {
+            throw new IllegalArgumentException("Wallet not found");
+        }
+
         var transactionType = this.transactionTypeRepository.findById(command.transactionTypeId());
+
+
+        if (!transactionType.isPresent()) {
+            throw new IllegalArgumentException("Transaction type not found");
+        }
 
         var transaction = new Transaction(
                 wallet.get(),
