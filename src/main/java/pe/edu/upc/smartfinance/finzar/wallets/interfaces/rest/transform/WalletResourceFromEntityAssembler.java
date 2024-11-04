@@ -5,6 +5,7 @@ import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.WalletRe
 
 public class WalletResourceFromEntityAssembler {
     public static WalletResource toResourceFromEntity(Wallet entity) {
-        return new WalletResource(entity.getId(), entity.getUserId(), entity.getName(), entity.getBalance(), entity.getTotalBalance());
+        return new WalletResource(entity.getId(), entity.getName(), entity.getBalance(),
+                SimplifiedUserResourceFromEntityAssembler.toResourceFromEntity(entity.getUser()));
     }
 }
