@@ -1,10 +1,11 @@
-package pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates;
+package pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.entities.Category;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.entities.PeriodRecurrence;
 
@@ -29,4 +30,14 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "period_recurrence_id")
     private PeriodRecurrence periodRecurrence;
+
+    public Expense() {
+    }
+
+    public Expense updateInformation(Double amount, Category category, PeriodRecurrence periodRecurrence) {
+        this.amount = amount;
+        this.category = category;
+        this.periodRecurrence = periodRecurrence;
+        return this;
+    }
 }

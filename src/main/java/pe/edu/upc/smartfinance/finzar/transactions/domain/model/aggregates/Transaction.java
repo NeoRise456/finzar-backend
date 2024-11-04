@@ -1,4 +1,4 @@
-package pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates;
+package pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.entities.TransactionType;
 
 import java.time.LocalDateTime;
@@ -39,6 +40,15 @@ public class Transaction extends AuditableAbstractAggregateRoot<Transaction> {
     @Column(name = "transaction_date")
     private LocalDateTime transactionDate;
 
+    public Transaction() {
+    }
+
+    public Transaction updateInformation(Double amount, String note, LocalDateTime transactionDate) {
+        this.amount = amount;
+        this.note = note;
+        this.transactionDate = transactionDate;
+        return this;
+    }
 
 
 }

@@ -1,4 +1,4 @@
-package pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest;
+package pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
