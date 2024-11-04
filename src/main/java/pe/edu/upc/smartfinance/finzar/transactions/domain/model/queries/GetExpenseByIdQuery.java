@@ -1,4 +1,4 @@
 package pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries;
 
-public record GetExpenseById( Long expenseId) {
+public record GetExpenseByIdQuery(Long expenseId) {
 }
