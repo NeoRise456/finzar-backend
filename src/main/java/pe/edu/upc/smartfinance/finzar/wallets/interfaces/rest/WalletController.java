@@ -12,7 +12,8 @@ import pe.edu.upc.smartfinance.finzar.wallets.domain.model.queries.GetWalletsByU
 import pe.edu.upc.smartfinance.finzar.wallets.domain.services.WalletCommandService;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.services.WalletQueryService;
 import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.CreateWalletResource;
-import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.SimplifiedWalletResource;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.SimplifiedWalletResource;
+import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.SimplifiedUpdateWalletResource;
 import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.WalletResource;
 import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.transform.CreateWalletCommandFromResourceAssembler;
 import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.transform.UpdateWalletCommandFromResourceAssembler;
@@ -98,7 +99,7 @@ public class WalletController {
     }
 
     @PutMapping("/{walletId}")
-    public ResponseEntity<WalletResource> updateWallet(@PathVariable Long walletId, @RequestBody SimplifiedWalletResource resource) {
+    public ResponseEntity<WalletResource> updateWallet(@PathVariable Long walletId, @RequestBody SimplifiedUpdateWalletResource resource) {
         var updateWalletCommand = UpdateWalletCommandFromResourceAssembler.toCommandFromResource(walletId, resource);
 
         var optionalWallet = this.walletCommandService.handle(updateWalletCommand);
