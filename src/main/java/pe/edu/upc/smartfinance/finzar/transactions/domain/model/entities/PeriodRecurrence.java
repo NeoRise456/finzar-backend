@@ -1,11 +1,11 @@
-package pe.edu.upc.smartfinance.finzar.wallets.domain.model.entities;
+package pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import pe.edu.upc.smartfinance.finzar.wallets.domain.model.valueobjects.PeriodRecurrences;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.valueobjects.PeriodRecurrences;
 
 @Entity
 @Table(name = "period_recurrences")

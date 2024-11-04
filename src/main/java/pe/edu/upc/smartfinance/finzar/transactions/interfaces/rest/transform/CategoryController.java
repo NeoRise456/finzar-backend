@@ -1,18 +1,16 @@
-package pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest;
+package pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.upc.smartfinance.finzar.wallets.domain.model.queries.GetAllCategoriesQuery;
-import pe.edu.upc.smartfinance.finzar.wallets.domain.model.queries.GetCategoryByIdQuery;
-import pe.edu.upc.smartfinance.finzar.wallets.domain.services.CategoryCommandService;
-import pe.edu.upc.smartfinance.finzar.wallets.domain.services.CategoryQueryService;
-import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.CategoryResource;
-import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.CreateCategoryResource;
-import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.transform.CategoryResourceFromEntityAssembler;
-import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.transform.CreateCategoryCommandFromResourceAssembler;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetAllCategoriesQuery;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetCategoryByIdQuery;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.services.CategoryCommandService;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.services.CategoryQueryService;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.CategoryResource;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.CreateCategoryResource;
 
 import java.util.List;
 import java.util.stream.Collectors;

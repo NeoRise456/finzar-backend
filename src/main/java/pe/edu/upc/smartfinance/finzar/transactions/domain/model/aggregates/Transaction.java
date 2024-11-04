@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
-import pe.edu.upc.smartfinance.finzar.wallets.domain.model.entities.TransactionType;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.TransactionType;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package pe.edu.upc.smartfinance.finzar.wallets.domain.model.valueobjects;
+package pe.edu.upc.smartfinance.finzar.transactions.domain.model.valueobjects;
 
 public enum PeriodRecurrences {
     DAILY,
