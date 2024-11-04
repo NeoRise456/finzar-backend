@@ -27,7 +27,9 @@ public class WalletQueryServiceImpl implements WalletQueryService {
     @Transactional(readOnly = true)
     @Override
     public List<Wallet> handle(GetWalletsByUserIdQuery query) {
-        //TODO: implement validation of user existence
+        if (!this.userRepository.existsById(query.userId())){
+            throw new IllegalArgumentException("User not found");
+        }
 
         return this.walletRepository.findWalletsByUser_Id(query.userId());
     }
