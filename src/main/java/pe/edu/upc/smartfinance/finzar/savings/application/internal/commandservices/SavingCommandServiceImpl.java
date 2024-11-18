@@ -57,22 +57,22 @@ public class SavingCommandServiceImpl implements SavingCommandService {
             var updatedSaving = this.savingRepository.save(savingToUpdate);
             return Optional.of(updatedSaving);
         } catch (Exception e) {
-            throw new IllegalArgumentException("Error while updating saving: " + e.getMessage());
+                throw new IllegalArgumentException("Error while updating saving: " + e.getMessage());
+            }
+        }
+
+        @Override
+        public void handle(DeleteSavingCommand command) {
+            var savingId = command.savingId();
+
+            if (!this.savingRepository.existsById(savingId)) {
+                throw new IllegalArgumentException("Saving with id " + savingId + " does not exist");
+            }
+
+            try {
+                this.savingRepository.deleteById(savingId);
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Error while deleting saving: " + e.getMessage());
+            }
         }
     }
-
-    @Override
-    public void handle(DeleteSavingCommand command) {
-        var savingId = command.savingId();
-
-        if (!this.savingRepository.existsById(savingId)) {
-            throw new IllegalArgumentException("Saving with id " + savingId + " does not exist");
-        }
-
-        try {
-            this.savingRepository.deleteById(savingId);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Error while deleting saving: " + e.getMessage());
-        }
-    }
-}
