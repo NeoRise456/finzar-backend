@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import pe.edu.upc.smartfinance.finzar.IAM.domain.model.aggregates.User;
+import pe.edu.upc.smartfinance.finzar.iam.domain.model.aggregates.User;
 import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 
 @Entity
