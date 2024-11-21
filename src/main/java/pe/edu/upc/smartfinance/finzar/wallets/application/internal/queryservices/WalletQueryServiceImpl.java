@@ -2,7 +2,7 @@ package pe.edu.upc.smartfinance.finzar.wallets.application.internal.queryservice
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pe.edu.upc.smartfinance.finzar.IAM.infrastructure.persistence.jpa.repositories.UserRepository;
+import pe.edu.upc.smartfinance.finzar.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.queries.GetAllWalletsQuery;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.queries.GetWalletByIdQuery;
