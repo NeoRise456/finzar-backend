@@ -1,7 +1,7 @@
 package pe.edu.upc.smartfinance.finzar.wallets.application.internal.commandservices;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.smartfinance.finzar.IAM.infrastructure.persistence.jpa.repositories.UserRepository;
+import pe.edu.upc.smartfinance.finzar.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.commands.CreateWalletCommand;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.commands.DeleteWalletCommand;
