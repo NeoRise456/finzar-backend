@@ -1,6 +1,6 @@
 package pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.transform;
 
-import pe.edu.upc.smartfinance.finzar.IAM.domain.model.aggregates.User;
+import pe.edu.upc.smartfinance.finzar.iam.domain.model.aggregates.User;
 import pe.edu.upc.smartfinance.finzar.wallets.interfaces.rest.resources.SimplifiedUserResource;
 
 public class SimplifiedUserResourceFromEntityAssembler {
