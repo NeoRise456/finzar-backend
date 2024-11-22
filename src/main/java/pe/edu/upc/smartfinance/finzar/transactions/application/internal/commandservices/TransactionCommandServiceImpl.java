@@ -5,7 +5,6 @@ import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Trans
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.CreateTransactionCommand;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.DeleteTransactionCommand;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.UpdateTransactionCommand;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.TransactionType;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.services.TransactionCommandService;
 import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jpa.repositories.TransactionRepository;
 import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jpa.repositories.TransactionTypeRepository;
@@ -18,7 +17,7 @@ import java.util.Optional;
 public class TransactionCommandServiceImpl implements TransactionCommandService {
 
     private final TransactionRepository transactionRepository;
-    private final WalletRepository walletRepository;
+
     private final TransactionTypeRepository transactionTypeRepository;
 
     public TransactionCommandServiceImpl(TransactionRepository transactionRepository,
@@ -74,4 +73,7 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
     public Optional<Transaction> handle(UpdateTransactionCommand command) {
         return Optional.empty();
     }
+
+
+
 }

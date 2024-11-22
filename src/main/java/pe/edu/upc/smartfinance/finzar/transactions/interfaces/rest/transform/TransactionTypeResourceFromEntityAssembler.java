@@ -1,6 +1,5 @@
 package pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform;
 
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.TransactionType;
 import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.TransactionTypeResource;
 
 public class TransactionTypeResourceFromEntityAssembler {
