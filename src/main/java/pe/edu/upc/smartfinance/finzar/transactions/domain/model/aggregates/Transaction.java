@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.aggregates.Expense;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.aggregates.Income;
 import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.TransactionType;
@@ -46,6 +47,9 @@ public class Transaction extends AuditableAbstractAggregateRoot<Transaction> {
 
     @ManyToMany(mappedBy = "transactions")
     private Set<Income> incomes = new HashSet<>();
+
+    @ManyToMany(mappedBy = "transactions")
+    private Set<Expense> expenses = new HashSet<>();
 
     public Transaction(
             Wallet wallet,

@@ -7,7 +7,11 @@ import lombok.Getter;
 import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities.Category;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities.PeriodRecurrence;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Transaction;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -33,7 +37,13 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
     @JoinColumn(name = "period_recurrence_id")
     private PeriodRecurrence periodRecurrence;
 
-
+    @ManyToMany
+    @JoinTable(
+            name = "expense_transaction",
+            joinColumns = @JoinColumn(name = "transaction_id"),
+            inverseJoinColumns = @JoinColumn(name = "expense_id")
+    )
+    private Set<Transaction> transactions = new HashSet<>();
 
 
     public Expense() {

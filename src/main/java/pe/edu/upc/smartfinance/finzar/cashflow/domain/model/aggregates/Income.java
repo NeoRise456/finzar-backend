@@ -38,7 +38,6 @@ public class Income extends AuditableAbstractAggregateRoot<Income> {
     @JoinColumn(name = "period_recurrence_id")
     private PeriodRecurrence periodRecurrence;
 
-
     @ManyToMany
     @JoinTable(
             name = "income_transaction",

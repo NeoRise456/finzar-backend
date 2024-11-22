@@ -6,6 +6,7 @@ public record ExpenseResource(
         Long id,
         SimplifiedWalletResource wallet,
         String categoryName,
-        String periodRecurrenceName
+        String periodRecurrenceName,
+        Double amount
 ) {
 }

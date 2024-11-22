@@ -1,6 +1,7 @@
 package pe.edu.upc.smartfinance.finzar.transactions.application.internal.commandservices;
 
 import org.springframework.stereotype.Service;
+import pe.edu.upc.smartfinance.finzar.transactions.application.internal.outboundservice.ExternalExpenseService;
 import pe.edu.upc.smartfinance.finzar.transactions.application.internal.outboundservice.ExternalIncomeService;
 import pe.edu.upc.smartfinance.finzar.transactions.application.internal.outboundservice.ExternalWalletService;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Transaction;
@@ -23,15 +24,18 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
 
     private final ExternalWalletService externalWalletService;
     private final ExternalIncomeService externalIncomeService;
+    private final ExternalExpenseService externalExpenseService;
 
     public TransactionCommandServiceImpl(TransactionRepository transactionRepository,
                                          ExternalWalletService externalWalletService,
                                          TransactionTypeRepository transactionTypeRepository,
-                                         ExternalIncomeService externalIncomeService) {
+                                         ExternalIncomeService externalIncomeService,
+                                         ExternalExpenseService externalExpenseService) {
         this.transactionRepository = transactionRepository;
         this.externalWalletService = externalWalletService;
         this.transactionTypeRepository = transactionTypeRepository;
         this.externalIncomeService = externalIncomeService;
+        this.externalExpenseService = externalExpenseService;
     }
 
 
@@ -154,9 +158,37 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
             throw new IllegalArgumentException("Source Wallet not found");
         }
 
+        if(!externalExpenseService.existsExpenseById(command.expenseId())){
+            throw new IllegalArgumentException("Expense not found");
+        }
 
+        var sourceTransactionType = this.transactionTypeRepository.findByName(
+                TransactionTypes.EXPENSE
+        ).orElseThrow(() -> new IllegalArgumentException("Transaction Type not found"));
 
+        this.externalWalletService.subtractFromBalanceById(sourceWallet.get().getId(), command.amount());
 
-        return 0L;
+        var sourceTransaction = new Transaction(
+                sourceWallet.get(),
+                sourceTransactionType,
+                command.note(),
+                command.amount(),
+                command.transactionDate()
+        );
+
+        var expense = externalExpenseService.fetchExpenseById(command.expenseId()).get();
+
+        sourceTransaction.getExpenses().add(expense);
+
+        try {
+            this.transactionRepository.save(sourceTransaction);
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error saving transaction");
+        }
+
+        externalExpenseService.saveTransactionByExpenseId(command.expenseId(), sourceTransaction.getId());
+
+        return sourceTransaction.getId();
     }
 }

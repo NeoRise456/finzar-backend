@@ -1,7 +1,10 @@
 package pe.edu.upc.smartfinance.finzar.cashflow.application.internal.commandservices;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.smartfinance.finzar.cashflow.application.internal.outboundservices.ExternalTransactionService;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.aggregates.Expense;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.AddTransactionByExpenseIdCommand;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.CreateExpenseCommand;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.DeleteExpenseCommand;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.valueobjects.PeriodRecurrences;
@@ -20,12 +23,18 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
     private final WalletRepository walletRepository;
     private final CategoryRepository categoryRepository;
     private final PeriodRecurrenceRepository periodRecurrenceRepository;
+    private final ExternalTransactionService externalTransactionService;
 
-    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository , WalletRepository walletRepository, CategoryRepository categoryRepository, PeriodRecurrenceRepository periodRecurrenceRepository) {
+    public ExpenseCommandServiceImpl(ExpenseRepository expenseRepository ,
+                                     WalletRepository walletRepository,
+                                     CategoryRepository categoryRepository,
+                                     PeriodRecurrenceRepository periodRecurrenceRepository,
+                                     @Lazy ExternalTransactionService externalTransactionService) {
         this.expenseRepository = expenseRepository;
         this.walletRepository = walletRepository;
         this.categoryRepository = categoryRepository;
         this.periodRecurrenceRepository = periodRecurrenceRepository;
+        this.externalTransactionService = externalTransactionService;
     }
 
     @Override
@@ -71,6 +80,25 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
         }
         this.expenseRepository.deleteById(command.expenseId());
         return !this.expenseRepository.existsById(command.expenseId());
+    }
+
+    @Override
+    public void handle(AddTransactionByExpenseIdCommand command) {
+
+        if(!expenseRepository.existsById(command.expenseId())){
+            throw new IllegalArgumentException("Expense not found");
+        }
+
+        var expense = expenseRepository.findById(command.expenseId()).get();
+
+        var transaction = externalTransactionService.fetchTransactionById(command.transactionId());
+
+        expense.getTransactions().add(transaction.get());
+
+
+        this.expenseRepository.save(expense);
+
+
     }
 
 }
