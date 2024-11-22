@@ -120,21 +120,21 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
             throw new IllegalArgumentException("Income not found");
         }
 
+        var income = externalIncomeService.fetchIncomeById(command.incomeId()).get();
+
         var sourceTransactionType = this.transactionTypeRepository.findByName(
                 TransactionTypes.INCOME
         ).orElseThrow(() -> new IllegalArgumentException("Transaction Type not found"));
 
-        this.externalWalletService.addToBalanceById(sourceWallet.get().getId(), command.amount());
+        this.externalWalletService.addToBalanceById(sourceWallet.get().getId(), income.getAmount());
 
         var sourceTransaction = new Transaction(
                 sourceWallet.get(),
                 sourceTransactionType,
                 command.note(),
-                command.amount(),
+                income.getAmount(),
                 command.transactionDate()
         );
-
-        var income = externalIncomeService.fetchIncomeById(command.incomeId()).get();
 
         sourceTransaction.getIncomes().add(income);
 
@@ -162,21 +162,23 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
             throw new IllegalArgumentException("Expense not found");
         }
 
+        var expense = externalExpenseService.fetchExpenseById(command.expenseId()).get();
+
         var sourceTransactionType = this.transactionTypeRepository.findByName(
                 TransactionTypes.EXPENSE
         ).orElseThrow(() -> new IllegalArgumentException("Transaction Type not found"));
 
-        this.externalWalletService.subtractFromBalanceById(sourceWallet.get().getId(), command.amount());
+        this.externalWalletService.subtractFromBalanceById(sourceWallet.get().getId(), expense.getAmount());
 
         var sourceTransaction = new Transaction(
                 sourceWallet.get(),
                 sourceTransactionType,
                 command.note(),
-                command.amount(),
+                expense.getAmount(),
                 command.transactionDate()
         );
 
-        var expense = externalExpenseService.fetchExpenseById(command.expenseId()).get();
+
 
         sourceTransaction.getExpenses().add(expense);
 

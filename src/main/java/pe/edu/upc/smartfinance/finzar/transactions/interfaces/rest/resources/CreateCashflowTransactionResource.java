@@ -5,7 +5,6 @@ import java.util.Date;
 public record CreateCashflowTransactionResource(
         Long sourceWalletId,
         String note,
-        Double amount,
         Date transactionDate
 ) {
 }

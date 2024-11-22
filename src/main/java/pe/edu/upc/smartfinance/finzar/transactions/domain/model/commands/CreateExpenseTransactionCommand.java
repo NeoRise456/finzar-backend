@@ -5,7 +5,6 @@ import java.util.Date;
 public record CreateExpenseTransactionCommand(
         Long sourceWalletId,
         String note,
-        Double amount,
         Date transactionDate,
         Long expenseId
 ) {

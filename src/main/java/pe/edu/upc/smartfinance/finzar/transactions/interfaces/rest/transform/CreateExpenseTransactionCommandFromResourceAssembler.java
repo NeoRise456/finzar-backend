@@ -8,7 +8,6 @@ public class CreateExpenseTransactionCommandFromResourceAssembler {
         return new CreateExpenseTransactionCommand(
                 resource.sourceWalletId(),
                 resource.note(),
-                resource.amount(),
                 resource.transactionDate(),
                 expenseId
         );

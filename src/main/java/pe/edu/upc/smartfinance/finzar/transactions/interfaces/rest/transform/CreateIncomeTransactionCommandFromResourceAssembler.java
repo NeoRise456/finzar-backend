@@ -8,7 +8,6 @@ public class CreateIncomeTransactionCommandFromResourceAssembler {
         return new CreateIncomeTransactionCommand(
                 resource.sourceWalletId(),
                 resource.note(),
-                resource.amount(),
                 resource.transactionDate(),
                 incomeId
         );
