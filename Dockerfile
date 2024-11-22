@@ -16,6 +16,9 @@ ENV MAVEN_OPTS="-Dmaven.multiModuleProjectDirectory=/app \
 
 RUN mvn clean install -DskipTests
 
+RUN ls -l /app/target/
+
+
 # Stage 2: Run the application
 FROM openjdk:21
 LABEL authors="Neo"
