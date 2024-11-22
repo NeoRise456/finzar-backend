@@ -1,6 +1,8 @@
 package pe.edu.upc.smartfinance.finzar.iam.interfaces.acl;
 
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.stereotype.Service;
+import pe.edu.upc.smartfinance.finzar.iam.domain.model.aggregates.User;
 import pe.edu.upc.smartfinance.finzar.iam.domain.model.commands.SignUpCommand;
 import pe.edu.upc.smartfinance.finzar.iam.domain.model.entities.Role;
 import pe.edu.upc.smartfinance.finzar.iam.domain.model.queries.GetUserByIdQuery;
@@ -10,6 +12,7 @@ import pe.edu.upc.smartfinance.finzar.iam.domain.services.UserQueryService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * IamContextFacade
@@ -21,6 +24,7 @@ import java.util.List;
  * </p>
  *
  */
+@Service
 public class IamContextFacade {
 
   private final UserCommandService userCommandService;
@@ -89,4 +93,23 @@ public class IamContextFacade {
       return Strings.EMPTY;
     return result.get().getUsername();
   }
+
+
+  public Boolean existUserById(Long userId) {
+    var getUserByIdQuery = new GetUserByIdQuery(userId);
+    var result = userQueryService.handle(getUserByIdQuery);
+    return result.isPresent();
+  }
+
+  public Optional<User> fetchUserById(Long userId) {
+    var getUserByIdQuery = new GetUserByIdQuery(userId);
+    var result = userQueryService.handle(getUserByIdQuery);
+
+    return result;
+  }
+
+
 }
+
+
+

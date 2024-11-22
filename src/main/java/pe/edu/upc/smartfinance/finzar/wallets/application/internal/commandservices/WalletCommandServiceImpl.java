@@ -1,7 +1,8 @@
 package pe.edu.upc.smartfinance.finzar.wallets.application.internal.commandservices;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.smartfinance.finzar.iam.infrastructure.persistence.jpa.repositories.UserRepository;
+import pe.edu.upc.smartfinance.finzar.iam.interfaces.acl.IamContextFacade;
+import pe.edu.upc.smartfinance.finzar.wallets.application.internal.outboundservice.ExternalIamService;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.commands.*;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.services.WalletCommandService;
@@ -13,19 +14,17 @@ import java.util.Optional;
 public class WalletCommandServiceImpl implements WalletCommandService {
 
     private final WalletRepository walletRepository;
+    private final ExternalIamService externalIamService;
 
-    //TODO: add user external service
-    private final UserRepository userRepository;
-
-    public WalletCommandServiceImpl(WalletRepository walletRepository , UserRepository userRepository) {
+    public WalletCommandServiceImpl(WalletRepository walletRepository ,
+                                    ExternalIamService externalIamService) {
         this.walletRepository = walletRepository;
-        this.userRepository = userRepository;
-
+        this.externalIamService = externalIamService;
     }
 
     @Override
     public Long handle(CreateWalletCommand command) {
-        var optionalUser = this.userRepository.findById(command.userId());
+        var optionalUser = this.externalIamService.fetchUserById(command.userId());
         if (optionalUser.isEmpty()){
             throw new IllegalArgumentException("User not found");
         }
