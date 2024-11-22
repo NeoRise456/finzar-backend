@@ -1,5 +1,6 @@
 package pe.edu.upc.smartfinance.finzar.transactions.application.internal.commandservices;
 
+import org.springframework.stereotype.Service;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.SeedTransactionTypesCommand;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.TransactionType;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.valueobjects.TransactionTypes;
@@ -8,6 +9,7 @@ import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jp
 
 import java.util.Arrays;
 
+@Service
 public class TransactionTypesCommandServiceImpl implements TransactionTypesCommandService {
 
     private final TransactionTypeRepository transactionTypeRepository;

@@ -10,9 +10,9 @@ import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetTrans
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetTransactionsByWalletIdQuery;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.services.TransactionCommandService;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.services.TransactionQueryService;
-import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.CreateTransactionResource;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.CreateTransactionToWalletResource;
 import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.TransactionResource;
-import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform.CreateTransactionCommandFromResourceAssembler;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform.CreateTransactionToWalletCommandFromResourceAssembler;
 import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform.TransactionResourceFromEntityAssembler;
 
 import java.util.List;
@@ -50,16 +50,20 @@ public class TransactionController {
 
 
     @PostMapping
-    public ResponseEntity<TransactionResource> createTransaction(@RequestBody CreateTransactionResource resource) {
-        var createTransactionCommand = CreateTransactionCommandFromResourceAssembler.toCommandFromResource(resource);
+    public ResponseEntity<TransactionResource> createTransactionToWallet(@RequestBody CreateTransactionToWalletResource resource) {
 
-        var transactionId = this.transactionCommandService.handle(createTransactionCommand);
+        var createTransactionToWalletCommand = CreateTransactionToWalletCommandFromResourceAssembler.toCommandFromResource(resource);
+
+        var transactionId = this.transactionCommandService.handle(createTransactionToWalletCommand);
 
         if (transactionId.equals(0L)) {
             return ResponseEntity.badRequest().build();
         }
+
         var getTransactionByIdQuery = new GetTransactionByIdQuery(transactionId);
+
         var transaction = this.transactionQueryService.handle(getTransactionByIdQuery);
+
         var transactionResource = TransactionResourceFromEntityAssembler.toResourceFromEntity(transaction.get());
 
         return new ResponseEntity<>(transactionResource, HttpStatus.CREATED);

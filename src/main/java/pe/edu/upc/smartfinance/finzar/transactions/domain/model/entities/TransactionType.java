@@ -34,4 +34,8 @@ public class TransactionType {
         return new TransactionType(TransactionTypes.valueOf(name));
     }
 
+
+
+
+
 }

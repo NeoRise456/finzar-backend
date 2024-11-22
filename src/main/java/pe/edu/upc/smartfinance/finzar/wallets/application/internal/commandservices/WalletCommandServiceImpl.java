@@ -3,9 +3,7 @@ package pe.edu.upc.smartfinance.finzar.wallets.application.internal.commandservi
 import org.springframework.stereotype.Service;
 import pe.edu.upc.smartfinance.finzar.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
-import pe.edu.upc.smartfinance.finzar.wallets.domain.model.commands.CreateWalletCommand;
-import pe.edu.upc.smartfinance.finzar.wallets.domain.model.commands.DeleteWalletCommand;
-import pe.edu.upc.smartfinance.finzar.wallets.domain.model.commands.UpdateWalletCommand;
+import pe.edu.upc.smartfinance.finzar.wallets.domain.model.commands.*;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.services.WalletCommandService;
 import pe.edu.upc.smartfinance.finzar.wallets.infrastructure.persistence.jpa.repositories.WalletRepository;
 
@@ -15,6 +13,8 @@ import java.util.Optional;
 public class WalletCommandServiceImpl implements WalletCommandService {
 
     private final WalletRepository walletRepository;
+
+    //TODO: add user external service
     private final UserRepository userRepository;
 
     public WalletCommandServiceImpl(WalletRepository walletRepository , UserRepository userRepository) {
@@ -69,5 +69,43 @@ public class WalletCommandServiceImpl implements WalletCommandService {
         }
         this.walletRepository.deleteById(command.walletId());
         return !this.walletRepository.existsById(command.walletId());
+    }
+
+    @Override
+    public void handle(AddToBalanceByWalletIdCommand command) {
+        if (!this.walletRepository.existsById(command.walletId())){
+            throw new IllegalArgumentException("Wallet not found");
+        }
+
+        var wallet = this.walletRepository.findById(command.walletId()).get();
+        wallet.addToBalance(command.amount());
+
+        try {
+            this.walletRepository.save(wallet);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error while adding to balance: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void handle(SubtractToBalanceByWalletIdCommand command) {
+
+        if (!this.walletRepository.existsById(command.walletId())){
+            throw new IllegalArgumentException("Wallet not found");
+        }
+
+        var wallet = this.walletRepository.findById(command.walletId()).get();
+
+        if (wallet.getBalance() < command.amount()){
+            throw new IllegalArgumentException("Insufficient balance");
+        }
+
+        wallet.subtractFromBalance(command.amount());
+
+        try {
+            this.walletRepository.save(wallet);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error while subtracting to balance: " + e.getMessage());
+        }
     }
 }

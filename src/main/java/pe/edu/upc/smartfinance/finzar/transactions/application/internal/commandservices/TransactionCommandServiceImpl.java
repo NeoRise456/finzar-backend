@@ -1,79 +1,98 @@
 package pe.edu.upc.smartfinance.finzar.transactions.application.internal.commandservices;
 
 import org.springframework.stereotype.Service;
+import pe.edu.upc.smartfinance.finzar.transactions.application.internal.outboundservice.ExternalWalletService;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Transaction;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.CreateTransactionCommand;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.CreateTransactionToWalletCommand;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.DeleteTransactionCommand;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.UpdateTransactionCommand;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.valueobjects.TransactionTypes;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.services.TransactionCommandService;
 import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jpa.repositories.TransactionRepository;
 import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jpa.repositories.TransactionTypeRepository;
-import pe.edu.upc.smartfinance.finzar.wallets.infrastructure.persistence.jpa.repositories.WalletRepository;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 public class TransactionCommandServiceImpl implements TransactionCommandService {
 
     private final TransactionRepository transactionRepository;
-
+    private final ExternalWalletService externalWalletService;
     private final TransactionTypeRepository transactionTypeRepository;
 
     public TransactionCommandServiceImpl(TransactionRepository transactionRepository,
-                                         WalletRepository walletRepository,
+                                         ExternalWalletService externalWalletService,
                                          TransactionTypeRepository transactionTypeRepository) {
         this.transactionRepository = transactionRepository;
-        this.walletRepository = walletRepository;
+        this.externalWalletService = externalWalletService;
         this.transactionTypeRepository = transactionTypeRepository;
     }
 
+
     @Override
-    public Long handle(CreateTransactionCommand command) {
+    public Long handle(CreateTransactionToWalletCommand command) {
 
-        var wallet = this.walletRepository.findById(command.walletId());
+        var sourceWallet = this.externalWalletService.fetchWalletById(command.sourceWalletId());
 
-        if (!wallet.isPresent()) {
-            throw new IllegalArgumentException("Wallet not found");
+        if (sourceWallet.isEmpty()) {
+            throw new IllegalArgumentException("Source Wallet not found");
         }
 
-        var transactionType = this.transactionTypeRepository.findById(command.transactionTypeId());
+        var destinationWallet = this.externalWalletService.fetchWalletById(command.destinationWalletId());
 
-
-        if (!transactionType.isPresent()) {
-            throw new IllegalArgumentException("Transaction type not found");
+        if (destinationWallet.isEmpty()) {
+            throw new IllegalArgumentException("Destination Wallet not found");
         }
 
-        var transaction = new Transaction(
-                wallet.get(),
-                transactionType.get(),
+        var sourceTransactionType = this.transactionTypeRepository.findByName(
+                TransactionTypes.OUT_TRANSFER
+        ).orElseThrow(() -> new IllegalArgumentException("Transaction Type not found"));
+
+        var destinationTransactionType = this.transactionTypeRepository.findByName(
+                TransactionTypes.IN_TRANSFER
+        ).orElseThrow(() -> new IllegalArgumentException("Transaction Type not found"));
+
+        this.externalWalletService.subtractFromBalanceById(sourceWallet.get().getId(), command.amount());
+        this.externalWalletService.addToBalanceById(destinationWallet.get().getId(), command.amount());
+
+        var sourceTransaction = new Transaction(
+                sourceWallet.get(),
+                sourceTransactionType,
                 command.note(),
                 command.amount(),
-                LocalDateTime.now()
+                command.transactionDate()
         );
 
-        this.transactionRepository.save(transaction);
+        var destinationTransaction = new Transaction(
+                destinationWallet.get(),
+                destinationTransactionType,
+                command.note(),
+                command.amount(),
+                command.transactionDate()
+        );
 
-        return transaction.getId();
+        try {
+            this.transactionRepository.save(sourceTransaction);
+            this.transactionRepository.save(destinationTransaction);
+            return sourceTransaction.getId();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error saving transaction");
+        }
+
+
     }
 
     @Override
     public Boolean handle(DeleteTransactionCommand command) {
 
-        if (!this.transactionRepository.existsById(command.transactionId())) {
+        if (!transactionRepository.existsById(command.transactionId())) {
             throw new IllegalArgumentException("Transaction not found");
         }
-        this.transactionRepository.deleteById(command.transactionId());
-        return true;
+
+        try {
+            transactionRepository.deleteById(command.transactionId());
+            return true;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error deleting transaction");
+        }
     }
-
-
-    //TODO: Implement update handle for transaction
-    @Override
-    public Optional<Transaction> handle(UpdateTransactionCommand command) {
-        return Optional.empty();
-    }
-
-
-
 }

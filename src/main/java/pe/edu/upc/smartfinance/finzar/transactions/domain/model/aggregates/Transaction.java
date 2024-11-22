@@ -4,15 +4,18 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.TransactionType;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
 @Table(name = "transactions")
+@NoArgsConstructor
 public class Transaction extends AuditableAbstractAggregateRoot<Transaction> {
 
 
@@ -35,15 +38,21 @@ public class Transaction extends AuditableAbstractAggregateRoot<Transaction> {
 
     @NotNull
     @Column(name = "transaction_date")
-    private LocalDateTime transactionDate;
+    private Date transactionDate;
 
 
-    public Transaction() {
+    public Transaction(
+            Wallet wallet,
+            TransactionType transactionType,
+            String note,
+            Double amount,
+            Date transactionDate
+    ) {
+        this.wallet = wallet;
+        this.transactionType = transactionType;
+        this.note = note;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
     }
-
-
-
-
-
 
 }
