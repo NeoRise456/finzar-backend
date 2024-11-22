@@ -1,4 +1,4 @@
-package pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform;
+package pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -11,6 +11,8 @@ import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.CategoryCommandSe
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.CategoryQueryService;
 import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources.CategoryResource;
 import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources.CreateCategoryResource;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.CategoryResourceFromEntityAssembler;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.CreateCategoryCommandFromResourceAssembler;
 
 import java.util.List;
 import java.util.stream.Collectors;
