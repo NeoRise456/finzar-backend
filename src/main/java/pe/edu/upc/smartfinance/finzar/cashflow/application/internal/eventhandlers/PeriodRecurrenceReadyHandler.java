@@ -4,12 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.SeedPeriodRecurrencesCommand;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.PeriodRecurrenceCommandService;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.SeedTransactionTypesCommand;
 
 import java.sql.Timestamp;
 
+@Service
 public class PeriodRecurrenceReadyHandler {
 
     private final PeriodRecurrenceCommandService periodRecurrenceCommandService;

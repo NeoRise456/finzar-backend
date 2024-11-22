@@ -1,8 +1,11 @@
 package pe.edu.upc.smartfinance.finzar.transactions.application.internal.commandservices;
 
 import org.springframework.stereotype.Service;
+import pe.edu.upc.smartfinance.finzar.transactions.application.internal.outboundservice.ExternalIncomeService;
 import pe.edu.upc.smartfinance.finzar.transactions.application.internal.outboundservice.ExternalWalletService;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Transaction;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.CreateExpenseTransactionCommand;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.CreateIncomeTransactionCommand;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.CreateTransactionToWalletCommand;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.DeleteTransactionCommand;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.valueobjects.TransactionTypes;
@@ -16,15 +19,19 @@ import java.util.Optional;
 public class TransactionCommandServiceImpl implements TransactionCommandService {
 
     private final TransactionRepository transactionRepository;
-    private final ExternalWalletService externalWalletService;
     private final TransactionTypeRepository transactionTypeRepository;
+
+    private final ExternalWalletService externalWalletService;
+    private final ExternalIncomeService externalIncomeService;
 
     public TransactionCommandServiceImpl(TransactionRepository transactionRepository,
                                          ExternalWalletService externalWalletService,
-                                         TransactionTypeRepository transactionTypeRepository) {
+                                         TransactionTypeRepository transactionTypeRepository,
+                                         ExternalIncomeService externalIncomeService) {
         this.transactionRepository = transactionRepository;
         this.externalWalletService = externalWalletService;
         this.transactionTypeRepository = transactionTypeRepository;
+        this.externalIncomeService = externalIncomeService;
     }
 
 
@@ -94,5 +101,62 @@ public class TransactionCommandServiceImpl implements TransactionCommandService 
         } catch (Exception e) {
             throw new IllegalArgumentException("Error deleting transaction");
         }
+    }
+
+    @Override
+    public Long handle(CreateIncomeTransactionCommand command) {
+
+        var sourceWallet = this.externalWalletService.fetchWalletById(command.sourceWalletId());
+
+        if (sourceWallet.isEmpty()) {
+            throw new IllegalArgumentException("Source Wallet not found");
+        }
+
+        if(!externalIncomeService.existsIncomeById(command.incomeId())){
+            throw new IllegalArgumentException("Income not found");
+        }
+
+        var sourceTransactionType = this.transactionTypeRepository.findByName(
+                TransactionTypes.INCOME
+        ).orElseThrow(() -> new IllegalArgumentException("Transaction Type not found"));
+
+        this.externalWalletService.addToBalanceById(sourceWallet.get().getId(), command.amount());
+
+        var sourceTransaction = new Transaction(
+                sourceWallet.get(),
+                sourceTransactionType,
+                command.note(),
+                command.amount(),
+                command.transactionDate()
+        );
+
+        var income = externalIncomeService.fetchIncomeById(command.incomeId()).get();
+
+        sourceTransaction.getIncomes().add(income);
+
+        try {
+            this.transactionRepository.save(sourceTransaction);
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error saving transaction");
+        }
+
+        externalIncomeService.saveTransactionByIncomeId(command.incomeId(), sourceTransaction.getId());
+        return sourceTransaction.getId();
+    }
+
+    @Override
+    public Long handle(CreateExpenseTransactionCommand command) {
+
+        var sourceWallet = this.externalWalletService.fetchWalletById(command.sourceWalletId());
+
+        if (sourceWallet.isEmpty()) {
+            throw new IllegalArgumentException("Source Wallet not found");
+        }
+
+
+
+
+        return 0L;
     }
 }

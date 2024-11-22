@@ -8,6 +8,6 @@ public class CreateExpenseCommandFromResourceAssembler {
         return new CreateExpenseCommand(resource.amount(),
                 resource.walletId(),
                 resource.categoryId(),
-                resource.periodRecurrenceId());
+                resource.periodRecurrence());
     }
 }

@@ -13,6 +13,7 @@ import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAb
 @Table(name = "wallets")
 public class Wallet  extends AuditableAbstractAggregateRoot<Wallet> {
 
+    //TODO: refactor User to value object userid
     @Getter
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

@@ -4,6 +4,6 @@ public record CreateExpenseCommand(
         Double amount,
         Long walletId,
         Long categoryId,
-        Long periodRecurrenceId
+        String periodRecurrence
 ) {
 }

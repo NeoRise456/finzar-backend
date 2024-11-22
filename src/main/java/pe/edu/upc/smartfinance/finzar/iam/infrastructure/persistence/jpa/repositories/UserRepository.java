@@ -11,19 +11,7 @@ import java.util.Optional;
  * It extends the JpaRepository interface.
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>
-{
-  /**
-   * This method is responsible for finding the user by username.
-   * @param username The username.
-   * @return The user object.
-   */
+public interface UserRepository extends JpaRepository<User, Long> {
   Optional<User> findByUsername(String username);
-
-  /**
-   * This method is responsible for checking if the user exists by username.
-   * @param username The username.
-   * @return True if the user exists, false otherwise.
-   */
   boolean existsByUsername(String username);
 }

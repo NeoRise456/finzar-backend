@@ -20,6 +20,7 @@ public class Expense extends AuditableAbstractAggregateRoot<Expense> {
     @Column(name = "amount")
     private Double amount;
 
+    //TODO: refactor Wallet to value object walletid
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "wallet_id")
     private Wallet wallet;

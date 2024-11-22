@@ -10,7 +10,7 @@ public class ExpenseResourceFromEntityAssembler {
                 entity.getId(),
                 SimplifiedWalletResourceFromEntityAssembler.toResourceFromEntity(entity.getWallet()),
                 entity.getCategory().getName(),
-                entity.getPeriodRecurrence().getName()
+                entity.getPeriodRecurrence().getName().toString()
         );
     }
 }

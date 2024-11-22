@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.aggregates.Expense;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.CreateExpenseCommand;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.DeleteExpenseCommand;
-import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.UpdateExpenseCommand;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.valueobjects.PeriodRecurrences;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.ExpenseCommandService;
 import pe.edu.upc.smartfinance.finzar.cashflow.infrastructure.persistence.jpa.repositories.CategoryRepository;
 import pe.edu.upc.smartfinance.finzar.cashflow.infrastructure.persistence.jpa.repositories.ExpenseRepository;
@@ -44,12 +44,13 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
             throw new IllegalArgumentException("Category not found");
         }
 
-        var periodRecurrence = this.periodRecurrenceRepository.findById(command.periodRecurrenceId());
+        var periodRecurrence = this.periodRecurrenceRepository.findByName(
+                PeriodRecurrences.valueOf(command.periodRecurrence())
+        );
 
         if(!periodRecurrence.isPresent()){
             throw new IllegalArgumentException("Period Recurrence not found");
         }
-
 
         var expense = new Expense(
                 command.amount(),
@@ -72,9 +73,4 @@ public class ExpenseCommandServiceImpl implements ExpenseCommandService {
         return !this.expenseRepository.existsById(command.expenseId());
     }
 
-    //TODO: Implement update handle for Expense
-    @Override
-    public Optional<Expense> handle(UpdateExpenseCommand command) {
-        return Optional.empty();
-    }
 }

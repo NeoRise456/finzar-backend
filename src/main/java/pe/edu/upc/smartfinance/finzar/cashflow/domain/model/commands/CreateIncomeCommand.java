@@ -1,9 +1,9 @@
 package pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands;
 
-public record UpdateEarningCommand(
-        Long EarningId,
+public record CreateIncomeCommand(
+        Long walletId,
         Double amount,
         Long categoryId,
-        Long periodRecurrenceId
+        String periodRecurrence
 ) {
 }

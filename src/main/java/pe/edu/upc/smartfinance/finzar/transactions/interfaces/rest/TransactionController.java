@@ -5,13 +5,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.CreateIncomeCommandFromResourceAssembler;
+import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.CreateIncomeTransactionCommand;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.DeleteTransactionCommand;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetTransactionByIdQuery;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetTransactionsByWalletIdQuery;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.services.TransactionCommandService;
 import pe.edu.upc.smartfinance.finzar.transactions.domain.services.TransactionQueryService;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.CreateIncomeTransactionResource;
 import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.CreateTransactionToWalletResource;
 import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.TransactionResource;
+import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform.CreateIncomeTransactionCommandFromResourceAssembler;
 import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform.CreateTransactionToWalletCommandFromResourceAssembler;
 import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform.TransactionResourceFromEntityAssembler;
 
@@ -81,4 +85,23 @@ public class TransactionController {
         return ResponseEntity.ok("The Transaction with the given id has been deleted");
 
     }
+
+
+    @PostMapping("/income/{incomeId}")
+    public ResponseEntity<TransactionResource> createIncomeTransactionById (@RequestBody CreateIncomeTransactionResource resource, @PathVariable Long incomeId) {
+        var createTransactionToIncome = CreateIncomeTransactionCommandFromResourceAssembler.toCommandFromResource(resource, incomeId);
+
+        var transactionId = this.transactionCommandService.handle(createTransactionToIncome);
+
+        if (transactionId.equals(0L)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        var getTransactionByIdQuery = new GetTransactionByIdQuery(transactionId);
+        var transaction = this.transactionQueryService.handle(getTransactionByIdQuery);
+        var transactionResource = TransactionResourceFromEntityAssembler.toResourceFromEntity(transaction.get());
+
+        return new ResponseEntity<>(transactionResource, HttpStatus.CREATED);
+    }
+
 }

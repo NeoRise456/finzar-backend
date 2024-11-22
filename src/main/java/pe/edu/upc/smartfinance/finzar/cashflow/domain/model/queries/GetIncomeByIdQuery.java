@@ -1,4 +1,4 @@
 package pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries;
 
-public record GetEarningByIdQuery(Long earningId) {
+public record GetIncomeByIdQuery(Long earningId) {
 }

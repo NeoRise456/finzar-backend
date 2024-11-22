@@ -1,5 +1,6 @@
 package pe.edu.upc.smartfinance.finzar.cashflow.application.internal.commandservices;
 
+import org.springframework.stereotype.Service;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.SeedPeriodRecurrencesCommand;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities.PeriodRecurrence;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.valueobjects.PeriodRecurrences;
@@ -8,7 +9,7 @@ import pe.edu.upc.smartfinance.finzar.cashflow.infrastructure.persistence.jpa.re
 
 import java.util.Arrays;
 
-
+@Service
 public class PeriodRecurrenceCommandServiceImpl implements PeriodRecurrenceCommandService {
 
     private final PeriodRecurrenceRepository periodRecurrenceRepository;
