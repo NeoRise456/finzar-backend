@@ -1,7 +1,7 @@
 package pe.edu.upc.smartfinance.finzar.cashflow.application.internal.queryservices;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Expense;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.aggregates.Expense;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetExpenseByIdQuery;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetExpensesByWalletIdAndCategoryIdQuery;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.ExpenseQueryService;

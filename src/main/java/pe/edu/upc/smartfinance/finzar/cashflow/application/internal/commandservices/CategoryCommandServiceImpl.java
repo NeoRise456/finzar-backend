@@ -1,10 +1,10 @@
-package pe.edu.upc.smartfinance.finzar.transactions.application.internal.commandservices;
+package pe.edu.upc.smartfinance.finzar.cashflow.application.internal.commandservices;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.CreateCategoryCommand;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.Category;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.services.CategoryCommandService;
-import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jpa.repositories.CategoryRepository;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.CreateCategoryCommand;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities.Category;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.CategoryCommandService;
+import pe.edu.upc.smartfinance.finzar.cashflow.infrastructure.persistence.jpa.repositories.CategoryRepository;
 
 @Service
 public class CategoryCommandServiceImpl implements CategoryCommandService {

@@ -1,11 +1,11 @@
-package pe.edu.upc.smartfinance.finzar.transactions.application.internal.queryservices;
+package pe.edu.upc.smartfinance.finzar.cashflow.application.internal.queryservices;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.Category;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetAllCategoriesQuery;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetCategoryByIdQuery;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.services.CategoryQueryService;
-import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jpa.repositories.CategoryRepository;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities.Category;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetAllCategoriesQuery;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetCategoryByIdQuery;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.CategoryQueryService;
+import pe.edu.upc.smartfinance.finzar.cashflow.infrastructure.persistence.jpa.repositories.CategoryRepository;
 
 import java.util.List;
 import java.util.Optional;

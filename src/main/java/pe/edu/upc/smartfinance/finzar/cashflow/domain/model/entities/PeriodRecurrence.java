@@ -1,4 +1,4 @@
-package pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities;
+package pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

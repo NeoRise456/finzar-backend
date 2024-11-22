@@ -1,4 +1,4 @@
-package pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities;
+package pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.commands.CreateCategoryCommand;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.CreateCategoryCommand;
 
 @Entity
 @Table(name = "categories")

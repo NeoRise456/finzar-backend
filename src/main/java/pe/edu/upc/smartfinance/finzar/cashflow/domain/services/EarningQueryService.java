@@ -1,6 +1,6 @@
 package pe.edu.upc.smartfinance.finzar.cashflow.domain.services;
 
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Earning;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.aggregates.Earning;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetEarningByIdQuery;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetEarningsByWalletIdAndCategoryIdQuery;
 

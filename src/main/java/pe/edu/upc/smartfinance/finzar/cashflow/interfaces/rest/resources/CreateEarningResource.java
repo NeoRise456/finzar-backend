@@ -1,4 +1,4 @@
-package pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform;
+package pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources;
 
 public record CreateEarningResource(
         Double amount,

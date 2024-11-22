@@ -1,16 +1,16 @@
-package pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform;
+package pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetAllCategoriesQuery;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.queries.GetCategoryByIdQuery;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.services.CategoryCommandService;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.services.CategoryQueryService;
-import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.CategoryResource;
-import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.resources.CreateCategoryResource;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetAllCategoriesQuery;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetCategoryByIdQuery;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.CategoryCommandService;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.CategoryQueryService;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources.CategoryResource;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources.CreateCategoryResource;
 
 import java.util.List;
 import java.util.stream.Collectors;

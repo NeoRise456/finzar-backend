@@ -1,14 +1,14 @@
 package pe.edu.upc.smartfinance.finzar.cashflow.application.internal.commandservices;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Earning;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.aggregates.Earning;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.CreateEarningCommand;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.DeleteEarningCommand;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.commands.UpdateEarningCommand;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.EarningCommandService;
-import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jpa.repositories.CategoryRepository;
+import pe.edu.upc.smartfinance.finzar.cashflow.infrastructure.persistence.jpa.repositories.CategoryRepository;
 import pe.edu.upc.smartfinance.finzar.cashflow.infrastructure.persistence.jpa.repositories.EarningRepository;
-import pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jpa.repositories.PeriodRecurrenceRepository;
+import pe.edu.upc.smartfinance.finzar.cashflow.infrastructure.persistence.jpa.repositories.PeriodRecurrenceRepository;
 import pe.edu.upc.smartfinance.finzar.wallets.infrastructure.persistence.jpa.repositories.WalletRepository;
 
 import java.util.Optional;

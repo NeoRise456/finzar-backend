@@ -1,12 +1,12 @@
-package pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates;
+package pe.edu.upc.smartfinance.finzar.cashflow.domain.model.aggregates;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import pe.edu.upc.smartfinance.finzar.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.Category;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.PeriodRecurrence;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities.Category;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities.PeriodRecurrence;
 import pe.edu.upc.smartfinance.finzar.wallets.domain.model.aggregates.Wallet;
 
 @Entity

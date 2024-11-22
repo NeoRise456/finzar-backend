@@ -10,8 +10,8 @@ import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetExpenseBy
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetExpensesByWalletIdAndCategoryIdQuery;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.ExpenseCommandService;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.ExpenseQueryService;
-import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.CreateExpenseResource;
-import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.ExpenseResource;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources.CreateExpenseResource;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources.ExpenseResource;
 import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.CreateExpenseCommandFromResourceAssembler;
 import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.ExpenseResourceFromEntityAssembler;
 

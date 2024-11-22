@@ -1,6 +1,7 @@
 package pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform;
 
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.aggregates.Earning;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.aggregates.Earning;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources.EarningResource;
 import pe.edu.upc.smartfinance.finzar.transactions.interfaces.rest.transform.SimplifiedWalletResourceFromEntityAssembler;
 
 public class EarningResourceFromEntityAssembler {

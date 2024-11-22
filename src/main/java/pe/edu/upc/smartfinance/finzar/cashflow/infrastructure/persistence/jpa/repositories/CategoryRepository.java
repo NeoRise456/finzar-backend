@@ -1,7 +1,7 @@
-package pe.edu.upc.smartfinance.finzar.transactions.infrastructure.persistence.jpa.repositories;
+package pe.edu.upc.smartfinance.finzar.cashflow.infrastructure.persistence.jpa.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pe.edu.upc.smartfinance.finzar.transactions.domain.model.entities.Category;
+import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.entities.Category;
 
 import java.util.Optional;
 

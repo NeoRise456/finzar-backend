@@ -10,8 +10,8 @@ import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetEarningBy
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.model.queries.GetEarningsByWalletIdAndCategoryIdQuery;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.EarningCommandService;
 import pe.edu.upc.smartfinance.finzar.cashflow.domain.services.EarningQueryService;
-import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.CreateEarningResource;
-import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.EarningResource;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources.CreateEarningResource;
+import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.resources.EarningResource;
 import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.CreateEarningCommandFromResourceAssembler;
 import pe.edu.upc.smartfinance.finzar.cashflow.interfaces.rest.transform.EarningResourceFromEntityAssembler;
 
