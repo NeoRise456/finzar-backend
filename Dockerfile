@@ -22,6 +22,6 @@ RUN ls -l /app/target/
 # Stage 2: Run the application
 FROM openjdk:21
 LABEL authors="Neo"
-COPY --from=build /app/target/hardko-store-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/finzar-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]
